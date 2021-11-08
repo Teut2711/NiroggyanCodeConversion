@@ -1,0 +1,60 @@
+const main = require('./main.js');
+const dfd = require("danfojs-node");
+
+test("check subtests equality",  () => {
+
+    return dfd.read_excel(source = "./case7.xlsx").then(
+        df => {
+            expect(main.getSubTests(df)).toStrictEqual(
+                {
+                    'BP & BMI': ['BMI',
+                        'Systolic',
+                        'Diastolic',
+                        'Pulse',
+                        'Oxygen Saturation Levels'],
+                    'Diabetes': ['Random Blood Sugar'],
+                    'Complete Blood Count': ['Haemoglobin',
+                        'Total Leukocyte Count',
+                        'RBC count',
+                        'Packed Cell Volume(PCV)',
+                        'MCV',
+                        'MCH',
+                        'MCHC',
+                        'Neutrophils',
+                        'Lymphocytes',
+                        'Eosiniphils',
+                        'Monocytes',
+                        'Basophils',
+                        'Platelet Count',
+                        'ESR'],
+                    'Urine': ['Urine Colour',
+                        'Appearance',
+                        'pH',
+                        'Specific Gravity',
+                        'Albumin',
+                        'Sugar',
+                        'RBC',
+                        'Crystals',
+                        'Casts',
+                        'Others'],
+                    'Body Screening': ['Vision Advice', 'X-Ray', 'Audiometry'],
+                    'Lifestyle & Occupation': ['Personal Habits',
+                        'Present Complaints',
+                        'Past History',
+                        'Family History',
+                        'Allergic Manifestations',
+                        'Occupational Disease or Injury',
+                        'Fitness'],
+                    'Body Systems': ['Cardio Vascular System',
+                        'Abdomen',
+                        'Skin',
+                        'Respiratory System',
+                        'Locomotor System'],
+                    'Covid': ['COVID19 Caccination Status']
+                }
+
+            )
+
+        }
+    ).catch("Subtests aren't equal");
+})
