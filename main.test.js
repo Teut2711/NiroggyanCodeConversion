@@ -1,60 +1,36 @@
-const main = require('./main.js');
-const dfd = require("danfojs-node");
+const read_excel = require("danfojs-node").read_excel;
+const { getSubTests, Locations, Departments } = require('./main.js');
+const test7Fixture = require('./testFixtures/case7.test.json');
 
-test("check subtests equality",  () => {
 
-    return dfd.read_excel(source = "./case7.xlsx").then(
-        df => {
-            expect(main.getSubTests(df)).toStrictEqual(
-                {
-                    'BP & BMI': ['BMI',
-                        'Systolic',
-                        'Diastolic',
-                        'Pulse',
-                        'Oxygen Saturation Levels'],
-                    'Diabetes': ['Random Blood Sugar'],
-                    'Complete Blood Count': ['Haemoglobin',
-                        'Total Leukocyte Count',
-                        'RBC count',
-                        'Packed Cell Volume(PCV)',
-                        'MCV',
-                        'MCH',
-                        'MCHC',
-                        'Neutrophils',
-                        'Lymphocytes',
-                        'Eosiniphils',
-                        'Monocytes',
-                        'Basophils',
-                        'Platelet Count',
-                        'ESR'],
-                    'Urine': ['Urine Colour',
-                        'Appearance',
-                        'pH',
-                        'Specific Gravity',
-                        'Albumin',
-                        'Sugar',
-                        'RBC',
-                        'Crystals',
-                        'Casts',
-                        'Others'],
-                    'Body Screening': ['Vision Advice', 'X-Ray', 'Audiometry'],
-                    'Lifestyle & Occupation': ['Personal Habits',
-                        'Present Complaints',
-                        'Past History',
-                        'Family History',
-                        'Allergic Manifestations',
-                        'Occupational Disease or Injury',
-                        'Fitness'],
-                    'Body Systems': ['Cardio Vascular System',
-                        'Abdomen',
-                        'Skin',
-                        'Respiratory System',
-                        'Locomotor System'],
-                    'Covid': ['COVID19 Caccination Status']
-                }
-
-            )
-
+describe("Read File", () => {
+ 
+    let df;
+    beforeAll(async () => {
+        try {
+            df = await read_excel("./case7.xlsx");
         }
-    ).catch("Subtests aren't equal");
-})
+        catch (err) {
+            console.error(err.message);
+        }
+    });
+
+    test("check subtests", () => {
+        expect(getSubTests(df)).toStrictEqual(test7Fixture);
+    })
+
+
+    test("check locations", () => {
+        const locations = new Locations(df)
+        expect(locations.get()).toStrictEqual(['Mixed', 'Vegetarian'])
+        expect(locations.getWithIndices()).toStrictEqual({ 'Mixed': 0, 'Vegetarian': 1 })
+
+    })
+
+    test("check departments", () => {
+        const departments = new Departments(df)
+        expect(departments.get()).toStrictEqual(['Cogen', 'Store', 'Safety', 'LGMD', 'QC', 'Maintainence', 'DMH', 'ETP', 'Electrical', 'Instrumentation', 'Starch', 'Purchase', 'Industrial Purchase', 'Stores', 'Logistics', 'CWM', 'Manufacture', 'Quality', 'MSP', 'Maize', 'Finance', 'Civil', 'IT', 'Deravative', 'Accounts', 'Production', 'Supply Planning', 'DM Plant', 'COGEN', 'HR', '-', 'Quality Control', 'Environment', 'Maize Purchase', 'HSE', 'Crusing Operator', 'Export', 'MDH', 'Maize Quality Control', 'Process', 'Project', 'OHC', 'Quality Analyst', 'WTP', 'Supply Chain', 'SCM', 'Technician', 'Mechanical', 'Manufacturing Exc', 'DMH & LG', 'Manufacturing', 'SC', 'Bioproduct'])
+    })
+
+}
+)
