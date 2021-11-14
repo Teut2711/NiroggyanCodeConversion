@@ -1,26 +1,29 @@
-const{ DepartmentList }= require("./Department")
+const { DepartmentList } = require('./Department');
 
 class LocationList {
-    #items = []
+    #items = [];
+
     add(location) {
-        if (location.index === null)
-            location.index = this.#items.length;
-        this.#items.push(location);
+        const loc = location;
+        if (loc.index === null) { loc.index = this.#items.length; }
+        this.#items.push(loc);
     }
+
     get data() {
-        return this.#items.map(item => item.data);
+        return this.#items.map((item) => item.data);
     }
+
     map(f) {
-        return this.#items.map(f)
-
+        return this.#items.map(f);
     }
-
 }
 
 class Location {
-    #name = "";
+    #name = '';
+
     #departments = [];
-    index = null
+
+    index = null;
 
     constructor(name) {
         this.#departments = new DepartmentList();
@@ -35,13 +38,12 @@ class Location {
         return {
             index: this.index,
             location: this.#name,
-            departments: this.#departments.data
-        }
-
+            departments: this.#departments.data,
+        };
     }
 }
 
 module.exports = {
     Location,
-    LocationList
-}
+    LocationList,
+};

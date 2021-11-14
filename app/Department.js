@@ -1,26 +1,29 @@
-const { ProfileList } = require("./Profile")
+const { ProfileList } = require('./Profile');
+
 class DepartmentList {
-    #items = []
+    #items = [];
+
     add(department) {
-        if (department.index === null)
-            department.index = this.#items.length;
-        this.#items.push(department);
+        const temp = department;
+        if (temp.index === null) { temp.index = this.#items.length; }
+        this.#items.push(temp);
     }
+
     get data() {
-        return this.#items.map(item => item.data);
+        return this.#items.map((item) => item.data);
     }
+
     map(f) {
-        return this.#items.map(f)
-
+        return this.#items.map(f);
     }
-
 }
 
-
 class Department {
-    #name = "";
+    #name = '';
+
     #profiles = [];
-    index = null
+
+    index = null;
 
     constructor(name) {
         this.#profiles = new ProfileList();
@@ -35,13 +38,12 @@ class Department {
         return {
             index: this.index,
             department: this.#name,
-            profiles: this.#profiles.data
+            profiles: this.#profiles.data,
         };
     }
 }
 
-
 module.exports = {
     Department,
-    DepartmentList
-}
+    DepartmentList,
+};

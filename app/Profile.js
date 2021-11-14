@@ -1,50 +1,59 @@
-const { Filter } = require('./utils')
-
 class ProfileList {
-    #items = []
+    #items = [];
+
     add(profile) {
-        if (profile.index === null)
-            profile.index = this.#items.length;
-        this.#items.push(profile);
+        const temp = profile;
+        if (temp.index === null) { temp.index = this.#items.length; }
+        this.#items.push(temp);
     }
+
     get data() {
-        return this.#items.map(item => item.data);
+        return this.#items.map((item) => item.data);
     }
+
     map(f) {
-        return this.#items.map(f)
-
+        return this.#items.map(f);
     }
-
 }
 
 class Profile {
-    #name = ""
-    #comment = ""
-    #sections = []
-    #subtests = []
-    index = null
-    constructor(name, comment = "") {
-        this.#name = name;
-        this.#comment = comment || "Hello";
+    #name = '';
 
+    #comment = '';
+
+    #sections = [];
+
+    #subtests = [];
+
+    index = null;
+
+    constructor(name, comment = '') {
+        this.#name = name;
+        this.#comment = comment || 'Hello';
     }
 
     add(section) {
         this.#sections.push(section);
     }
+
     get data() {
+        const temp = this.#sections.map((item) => item.data);
+        const subTests = [...new Set([].concat(...temp.map((item) => item.subTests)))];
+        temp.forEach((item) => {
+            delete item.subTests;
+        });
+
         return {
             index: this.index,
             name: this.#name,
-            ...Object.assign({}, ...this.#sections.map(item => item.data)),
+            ...Object.assign({}, ...temp),
+            subTests,
             comment: this.#comment,
-            subTests: this.#subtests
-        }
+        };
     }
-
 }
 
 module.exports = {
     ProfileList,
     Profile,
-}
+};

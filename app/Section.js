@@ -1,45 +1,46 @@
-const { Filter } = require('./utils')
+const { Filter } = require('./utils');
 
 class Section {
-    #ageGroup = ""
-    #gender = ""
-    index = null
-    #attributes = {}
+    #ageGroup = '';
+
+    #gender = '';
+
+    index = null;
+
+    #attributes = {};
+
     constructor(gender, ageGroup, df) {
         this.#gender = gender;
         this.#ageGroup = ageGroup;
-        this.#setattributes(df)
+        this.#setattributes(df);
     }
 
-    #applyFilters(df, filters) {
+    static applyFilters(df, filters) {
         let temp = df;
-        for (let aFilter of filters)
-            temp = aFilter.applyOn(temp)
+        filters.forEach((aFilter) => {
+            temp = aFilter.applyOn(temp);
+        });
         return temp;
-    };
-    #setattributes(df) {
+    }
 
+    #setattributes(df) {
         const filtersAnomaly = [
-            new Filter("Impression", "!=", "Normal"),
-            new Filter("Impression", "!=", "Inrange")
-        ]
-        const countAgeGroupGender = "count" +
-            this.#ageGroup.charAt(0).toUpperCase() +
-            this.#ageGroup.slice(1) +
-            this.#gender.charAt(0).toUpperCase() +
-            this.#gender.slice(1);
+            new Filter('Impression', '!=', 'Normal'),
+            new Filter('Impression', '!=', 'Inrange'),
+        ];
+        const countAgeGroupGender = `count${this.#ageGroup.charAt(0).toUpperCase()}${this.#ageGroup.slice(1)}${this.#gender.charAt(0).toUpperCase()}${this.#gender.slice(1)}`;
         this.#attributes = {
             [countAgeGroupGender]: df?.shape[0],
-            [`${countAgeGroupGender}Anomalies`]: this.#applyFilters(df, filtersAnomaly)?.shape[0]
-        }
+            [`${countAgeGroupGender}Anomalies`]: Section.applyFilters(df, filtersAnomaly)?.shape[0],
+            subTests: df['Observation Name'].unique().values,
+        };
     }
 
     get data() {
-        return this.#attributes
+        return this.#attributes;
     }
-
 }
 
 module.exports = {
-    Section
-} 
+    Section,
+};

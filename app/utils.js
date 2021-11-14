@@ -1,4 +1,3 @@
-
 class Filter {
     constructor(column, comparator, value) {
         this.column = column;
@@ -13,7 +12,7 @@ class Filter {
             temp = df.query(this.#getquery());
             const finalColumns = temp.columns;
             const mapping = Object.fromEntries(initialColumns.map((v, i) => [finalColumns[i], v]));
-            temp = temp.rename({ mapper: mapping })
+            temp = temp.rename({ mapper: mapping });
         }
         return temp;
     }
@@ -22,11 +21,11 @@ class Filter {
         return {
             column: this.column,
             is: this.comparator,
-            to: this.value
-        }
+            to: this.value,
+        };
     }
-};
+}
 
 module.exports = {
-    Filter
-}
+    Filter,
+};
