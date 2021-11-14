@@ -7,8 +7,6 @@ const { Profile } = require('./app/Profile');
 const { Section } = require('./app/Section');
 
 
-
-
 (async function () {
     try {
         const zip = (list1, list2) => {
@@ -28,9 +26,7 @@ const { Section } = require('./app/Section');
 
 
         let df = testsDf;
-        ["Location", "Dept", "Gender", "Age Group"].forEach(item => {
-            df = df.query({ condition: df[item].apply(x => !([undefined, ""].includes(x))).values })
-        })
+        df = dropNulls(df);
 
         const allLocations = df["Location"].unique().values
         const allDepartments = df["Dept"].unique().values
@@ -41,6 +37,7 @@ const { Section } = require('./app/Section');
         let dfGroupBy = df.groupby(["Location", "Dept", "Test Name", "Gender", "Age Group"])
 
         const locationsList = new LocationList();
+        
 
 
         allLocations.forEach(
@@ -73,7 +70,8 @@ const { Section } = require('./app/Section');
                                             }))
                             })
                     })
-            })
+            }
+        )
 
         writeJSON(locationsList.data)
 
@@ -81,7 +79,7 @@ const { Section } = require('./app/Section');
         function writeJSON(data) {
 
             // write JSON string to a file
-            fs.writeFile('user.json', JSON.stringify(data), (err) => {
+            fs.writeFile('user.json', JSON.stringify(data, null, '\t'), (err) => {
                 if (err) {
                     throw err;
                 }
@@ -94,4 +92,11 @@ const { Section } = require('./app/Section');
     }
 })();
 
+
+function dropNulls(df) {
+    ["Location", "Dept", "Gender", "Age Group"].forEach(item => {
+        df = df.query({ condition: df[item].apply(x => !([undefined, ""].includes(x))).values });
+    });
+    return df;
+}
 
