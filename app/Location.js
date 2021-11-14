@@ -1,3 +1,5 @@
+const{ DepartmentList }= require("./Department")
+
 class LocationList {
     #items = []
     add(location) {
@@ -15,3 +17,31 @@ class LocationList {
 
 }
 
+class Location {
+    #name = "";
+    #departments = [];
+    index = null
+
+    constructor(name) {
+        this.#departments = new DepartmentList();
+        this.#name = name;
+    }
+
+    add(department) {
+        this.#departments.add(department);
+    }
+
+    get data() {
+        return {
+            index: this.index,
+            location: this.#name,
+            departments: this.#departments.data
+        }
+
+    }
+}
+
+module.exports = {
+    Location,
+    LocationList
+}

@@ -1,13 +1,10 @@
 const read_excel = require("danfojs-node").read_excel;
 const fs = require("fs");
-const { Filter, LocationList,
-    DepartmentList,
-    Location,
-    Department,
-    Profile,
-    Section } = require('./main.js');
-const centralData = require("./fixtures/centralData.json");
-const testsData = require("./fixtures/tests.json");
+
+const { LocationList, Location } = require('./app/Location');
+const { Department } = require('./app/Department');
+const { Profile } = require('./app/Profile');
+const { Section } = require('./app/Section');
 
 
 
@@ -50,6 +47,7 @@ const testsData = require("./fixtures/tests.json");
             location => {
                 let aLocation = new Location(location)
                 locationsList.add(aLocation)
+
 
                 allDepartments.forEach(
                     department => {
